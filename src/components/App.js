@@ -1,16 +1,18 @@
 import React, { Component } from "react";
+import Search from "./Search/Search"
 
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      message: "Hello World"
-    };
-  }
+    }
+}
+
   render() {
     return (
-      <div>
-        <p>{this.state.message}</p>
+      <div >
+        <Search
+        />
       </div>
     );
   }
