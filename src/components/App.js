@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar } from "./Calendar/Calendar";
+import { Picture } from "./Picture";
 
 export default function App() {
   const [apod, setApod] = useState(null);
@@ -26,6 +27,7 @@ export default function App() {
         }&date=${convertDateToQuery(current)}`
       );
       console.log(result.data);
+      setApod(result.data);
     };
 
     getAPOD();
@@ -33,7 +35,7 @@ export default function App() {
 
   return (
     <div>
-      <div>{}</div>
+      <Picture apod={apod} />
       <Calendar setCurrent={setCurrent} />
     </div>
   );
