@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Calendar } from "./Calendar/Calendar";
 import { Picture } from "./Picture";
+import { SignIn } from "./SignIn";
 
 export default function App() {
   const [apod, setApod] = useState(null);
   const [current, setCurrent] = useState(new Date());
 
   const convertDateToQuery = date => {
-    console.log("here", typeof date, date);
-    console.log(date.getFullYear());
     let year = `${date.getFullYear()}`,
       month = date.getMonth(),
       day = date.getDate();
@@ -26,7 +25,6 @@ export default function App() {
           process.env.REACT_APP_KY
         }&date=${convertDateToQuery(current)}`
       );
-      console.log(result.data);
       setApod(result.data);
     };
 
@@ -35,6 +33,7 @@ export default function App() {
 
   return (
     <div>
+      <SignIn />
       <Picture apod={apod} />
       <Calendar setCurrent={setCurrent} />
     </div>

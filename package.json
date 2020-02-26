@@ -30,7 +30,11 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "bcrypt": "^4.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-session": "^1.4.0",
     "dotenv": "^8.2.0",
+    "mysql": "^2.18.1",
     "react": "^16.6.0",
     "react-dom": "^16.6.0"
   }

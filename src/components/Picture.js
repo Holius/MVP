@@ -5,7 +5,8 @@ export function Picture(props) {
   if (apod === null) {
     return <div>Loading</div>;
   }
-  const url = apod.hdurl !== undefined ? apod.hdurl : apod.url;
+  const url = apod.url;
+  //   const url = apod.hdurl !== undefined ? apod.hdurl : apod.url;
   const type = apod.media_type;
   const title = apod.title;
   const description = apod.description;
