@@ -14,6 +14,7 @@ CREATE TABLE entries (
     url VARCHAR(250),
     description text,
     title VARCHAR(150),
+    media_type VARCHAR(20),
     likes INT
 );
 

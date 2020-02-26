@@ -51,12 +51,11 @@ app.route("/apod").post((req, res) => {
   const url = req.body.url;
   const description = req.body.description;
   const title = req.body.title;
-
+  const type = req.body.type;
   connection.query(
-    `INSERT INTO entries (date, url, description, title) VALUES ("${date}", "${url}", "${description}", "${title}")`,
+    `INSERT INTO entries (date, url, description, title, media_type) VALUES ("${date}", "${url}", "${description}", "${title}", "${type}")`,
     async function(error, results) {
       if (error) {
-        console.log(error);
         res.status(500).send();
       } else {
         res.status(201).send();
@@ -96,28 +95,41 @@ app.get("/apples", (req, res) => {
   }
 });
 
-app.route("/comment").post(async (req, res) => {
-  const comment = req.body.comment;
-  const date = req.body.date;
-  const username = req.session.username;
-  console.log(date, date.length);
-  if (req.session.id !== 1234) {
-    res.status(404).send();
-  } else {
+app
+  .route("/comment")
+  .get((req, res) => {
+    const date = req.query.date;
     connection.query(
-      `INSERT INTO comments (comment, entries_date, users_username) VALUES ('${comment}', '${date}', '${username}')`,
+      `SELECT * FROM comments WHERE entries_date="${date}" ORDER BY created_on DESC`,
       async function(error, results) {
         if (error) {
           console.log(error);
           res.status(500).send();
         } else {
-          res.status(201).send();
+          res.status(201).send(results);
         }
       }
     );
-  }
-});
-
-app.get("/comment");
-
+  })
+  .post(async (req, res) => {
+    const comment = req.body.comment;
+    const date = req.body.date;
+    const username = req.session.username;
+    console.log(date, date.length);
+    if (req.session.id !== 1234) {
+      res.status(404).send();
+    } else {
+      connection.query(
+        `INSERT INTO comments (comment, entries_date, users_username) VALUES ("${comment}", "${date}", "${username}")`,
+        async function(error, results) {
+          if (error) {
+            console.log(error);
+            res.status(500).send();
+          } else {
+            res.status(201).send();
+          }
+        }
+      );
+    }
+  });
 app.listen(port, () => console.log("port " + port + " is on"));
