@@ -45,7 +45,7 @@ export function Comment(props) {
   };
 
   const displayPageNumbers = array => {
-    if (array.length < 5) return;
+    if (array.length < 6) return;
     let length = array.length;
     let pages = 0;
     while (length > 0) {

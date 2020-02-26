@@ -46,23 +46,38 @@ app.post("/user/signup", async (req, res) => {
   );
 });
 
-app.route("/apod").post((req, res) => {
-  const date = req.body.date;
-  const url = req.body.url;
-  const description = req.body.description;
-  const title = req.body.title;
-  const type = req.body.type;
-  connection.query(
-    `INSERT INTO entries (date, url, description, title, media_type) VALUES ("${date}", "${url}", "${description}", "${title}", "${type}")`,
-    async function(error, results) {
-      if (error) {
-        res.status(500).send();
-      } else {
-        res.status(201).send();
+app
+  .route("/apod")
+  .get((req, res) => {
+    const date = req.query.date;
+    connection.query(
+      `SELECT * FROM entries WHERE date="${date}" `,
+      async function(error, results) {
+        if (error || results.length === 0) {
+          res.status(500).send();
+        } else {
+          res.status(200).send(results);
+        }
       }
-    }
-  );
-});
+    );
+  })
+  .post((req, res) => {
+    const date = req.body.date;
+    const url = req.body.url;
+    const explanation = req.body.explanation;
+    const title = req.body.title;
+    const type = req.body.type;
+    connection.query(
+      `INSERT INTO entries (date, url, explanation, title, media_type) VALUES ("${date}", "${url}", "${explanation}", "${title}", "${type}")`,
+      async function(error, results) {
+        if (error) {
+          res.status(500).send();
+        } else {
+          res.status(201).send();
+        }
+      }
+    );
+  });
 
 app.post("/user/login", (req, res) => {
   connection.query(

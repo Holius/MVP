@@ -12,7 +12,7 @@ password VARCHAR(200)
 CREATE TABLE entries (
     date CHAR(10) PRIMARY KEY,
     url VARCHAR(250),
-    description text,
+    explanation text,
     title VARCHAR(150),
     media_type VARCHAR(20),
     likes INT

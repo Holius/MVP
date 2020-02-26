@@ -33,32 +33,45 @@ export default function App() {
   };
 
   useEffect(() => {
-    const getAPOD = async () => {
-      const result = await axios(
-        `https://api.nasa.gov/planetary/apod?api_key=${
-          process.env.REACT_APP_KY
-        }&date=${convertDateToQuery(current)}`
-      );
-      await setApod(result.data);
-      console.log(result.data);
-
-      await axios
-        .post("/apod", {
-          date: result.data.date,
-          url: result.data.url,
-          description: result.data.explanation,
-          title: result.data.title,
-          type: result.data.media_type
-        })
+    const getAPOD = () => {
+      axios
+        .get("/apod", { params: { date: convertDateToQuery(current) } })
         .then(function(response) {
-          console.log("inserted");
+          console.log(response.data, "hello");
+          setApod(response.data[0]);
+          getCurrentComments();
         })
         .catch(function(error) {
-          getCurrentComments();
-          console.log("no go");
+          axios(
+            `https://api.nasa.gov/planetary/apod?api_key=${
+              process.env.REACT_APP_KY
+            }&date=${convertDateToQuery(current)}`
+          )
+            .then(function(response) {
+              console.log(response.data);
+              setApod(response.data);
+              axios
+                .post("/apod", {
+                  date: response.data.date,
+                  url: response.data.url,
+                  explanation: response.data.explanation,
+                  title: response.data.title,
+                  type: response.data.media_type
+                })
+                .then(function(response) {
+                  console.log("inserted");
+                  getCurrentComments();
+                })
+                .catch(function(error) {
+                  console.log("no go");
+                  getCurrentComments();
+                });
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         });
     };
-
     getAPOD();
   }, [current]);
 

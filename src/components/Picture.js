@@ -9,7 +9,7 @@ export function Picture(props) {
   //   const url = apod.hdurl !== undefined ? apod.hdurl : apod.url;
   const type = apod.media_type;
   const title = apod.title;
-  const description = apod.description;
+  const explanation = apod.explanation;
   const date = apod.date;
 
   if (type === "image") {
