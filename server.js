@@ -27,10 +27,6 @@ app.use(
     keys: ["nvalsdjflkasdjfiow"]
   })
 );
-// onsignin req.session.userId = user.id
-const users = [];
-
-app.get("/user", (req, res) => res.json(users));
 
 app.post("/user/signup", async (req, res) => {
   const password = await bcrypt.hash(req.body.password, 10);
@@ -43,6 +39,26 @@ app.post("/user/signup", async (req, res) => {
       } else {
         console.log("user signed up");
         req.session.id = 1234;
+        req.session.username = username;
+        res.status(201).send();
+      }
+    }
+  );
+});
+
+app.route("/apod").post((req, res) => {
+  const date = req.body.date;
+  const url = req.body.url;
+  const description = req.body.description;
+  const title = req.body.title;
+
+  connection.query(
+    `INSERT INTO entries (date, url, description, title) VALUES ("${date}", "${url}", "${description}", "${title}")`,
+    async function(error, results) {
+      if (error) {
+        console.log(error);
+        res.status(500).send();
+      } else {
         res.status(201).send();
       }
     }
@@ -54,11 +70,9 @@ app.post("/user/login", (req, res) => {
     `SELECT * FROM users WHERE username='${req.body.name}'`,
     async function(error, results) {
       if (results[0] !== undefined) {
-        if (
-          (await bcrypt.compare(req.body.password, results[0].password)) &&
-          results[0] !== undefined
-        ) {
+        if (await bcrypt.compare(req.body.password, results[0].password)) {
           req.session.id = 1234;
+          req.session.username = req.body.name;
           res.status(201).send();
         }
       } else {
@@ -81,5 +95,29 @@ app.get("/apples", (req, res) => {
     res.status(404).send("noooooooooooooppppppppppppppeeee");
   }
 });
+
+app.route("/comment").post(async (req, res) => {
+  const comment = req.body.comment;
+  const date = req.body.date;
+  const username = req.session.username;
+  console.log(date, date.length);
+  if (req.session.id !== 1234) {
+    res.status(404).send();
+  } else {
+    connection.query(
+      `INSERT INTO comments (comment, entries_date, users_username) VALUES ('${comment}', '${date}', '${username}')`,
+      async function(error, results) {
+        if (error) {
+          console.log(error);
+          res.status(500).send();
+        } else {
+          res.status(201).send();
+        }
+      }
+    );
+  }
+});
+
+app.get("/comment");
 
 app.listen(port, () => console.log("port " + port + " is on"));
