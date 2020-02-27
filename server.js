@@ -62,15 +62,28 @@ app
     );
   })
   .post((req, res) => {
+    function convertString(string) {
+      let result = "";
+      for (let i = 0; i < string.length; i++) {
+        if (string[i] === '"') {
+          result += "'";
+        } else {
+          result += string[i];
+        }
+      }
+      return result;
+    }
     const date = req.body.date;
     const url = req.body.url;
-    const explanation = req.body.explanation;
-    const title = req.body.title;
+    const explanation = convertString(req.body.explanation);
+    const title = convertString(req.body.title);
     const type = req.body.type;
+    console.log(explanation);
     connection.query(
       `INSERT INTO entries (date, url, explanation, title, media_type) VALUES ("${date}", "${url}", "${explanation}", "${title}", "${type}")`,
       async function(error, results) {
         if (error) {
+          console.log(error);
           res.status(500).send();
         } else {
           res.status(201).send();
@@ -139,6 +152,42 @@ app
         async function(error, results) {
           if (error) {
             console.log(error);
+            res.status(500).send();
+          } else {
+            res.status(201).send();
+          }
+        }
+      );
+    }
+  });
+
+app
+  .route("/favorite")
+  .get((req, res) => {
+    const name = req.session.username;
+    connection.query(
+      `SELECT title, entries_date FROM favorites WHERE users_username="${name}"`,
+      async function(error, results) {
+        if (error) {
+          res.status(500).send();
+        } else {
+          res.status(201).send(results);
+        }
+      }
+    );
+  })
+  .post(async (req, res) => {
+    const title = req.body.title;
+    const date = req.body.date;
+    const name = req.session.username;
+    console.log(title, date, name);
+    if (req.session.id !== 1234) {
+      res.status(404).send();
+    } else {
+      connection.query(
+        `INSERT INTO favorites (title, entries_date, users_username) VALUES ("${title}", "${date}", "${name}")`,
+        async function(error, results) {
+          if (error) {
             res.status(500).send();
           } else {
             res.status(201).send();

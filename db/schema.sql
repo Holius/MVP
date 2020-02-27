@@ -30,8 +30,9 @@ CREATE TABLE comments (
 
 CREATE TABLE favorites (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150),
     entries_date CHAR(10),
     users_username VARCHAR(50),
     FOREIGN KEY (entries_date) REFERENCES entries(date),
     FOREIGN KEY (users_username) REFERENCES users(username)
-);
+); 

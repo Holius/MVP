@@ -4,20 +4,26 @@ import { Calendar } from "./Calendar/Calendar";
 import { Picture } from "./Picture";
 import { SignIn } from "./SignIn";
 import { Comment } from "./Comment";
+import { Favorite } from "./Favorite";
+import { DisplayFavorite } from "./DisplayFavorite";
 
 export default function App() {
-  const [apod, setApod] = useState(null);
+  const [apod, setApod] = useState({ title: null });
   const [current, setCurrent] = useState(new Date());
   const [allComments, setAllComments] = useState([]);
+  const [favorites, setFavorites] = useState([]);
 
   const convertDateToQuery = date => {
-    let year = `${date.getFullYear()}`,
-      month = date.getMonth(),
-      day = date.getDate();
-    month++;
-    month = month < 10 ? `0${month}` : `${month}`;
-    day = day < 10 ? `0${day}` : `${day}`;
-    return `${year}-${month}-${day}`;
+    if (typeof date !== "string") {
+      let year = `${date.getFullYear()}`,
+        month = date.getMonth(),
+        day = date.getDate();
+      month++;
+      month = month < 10 ? `0${month}` : `${month}`;
+      day = day < 10 ? `0${day}` : `${day}`;
+      return `${year}-${month}-${day}`;
+    }
+    return date;
   };
 
   const getCurrentComments = () => {
@@ -26,6 +32,18 @@ export default function App() {
       .then(function(response) {
         console.log(response.data);
         setAllComments(response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
+  const getFavorite = () => {
+    axios
+      .get("/favorite")
+      .then(function(response) {
+        console.log("success", response.data);
+        setFavorites(response.data);
       })
       .catch(function(error) {
         console.log(error);
@@ -77,9 +95,16 @@ export default function App() {
 
   return (
     <div>
-      <SignIn />
+      <SignIn setFavorites={setFavorites} getFavorite={getFavorite} />
       <Picture apod={apod} />
       <Calendar setCurrent={setCurrent} />
+      <Favorite
+        current={convertDateToQuery(current)}
+        title={apod.title}
+        getFavorite={getFavorite}
+        favorites={favorites}
+      />
+      <DisplayFavorite favorites={favorites} setCurrent={setCurrent} />
       <Comment
         current={current}
         convertDateToQuery={convertDateToQuery}

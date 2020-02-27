@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export function SignIn(props) {
+  const { setFavorites, getFavorite } = props;
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,6 +41,7 @@ export function SignIn(props) {
             })
             .then(data => {
               console.log("logged in");
+              getFavorite();
             })
             .catch(error => {
               console.log(error);
