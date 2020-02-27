@@ -7,14 +7,14 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 
-var connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "apod"
-});
+// var connection = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "password",
+//   database: "apod"
+// });
 
-connection.connect();
+// connection.connect();
 
 app.set("trust proxy", 1);
 
