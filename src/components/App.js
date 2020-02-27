@@ -4,7 +4,6 @@ import { Calendar } from "./Calendar/Calendar";
 import { Picture } from "./Picture";
 import { SignIn } from "./SignIn";
 import { Comment } from "./Comment";
-import { Favorite } from "./Favorite";
 import { DisplayFavorite } from "./DisplayFavorite";
 
 export default function App() {
@@ -96,14 +95,8 @@ export default function App() {
   return (
     <div>
       <SignIn setFavorites={setFavorites} getFavorite={getFavorite} />
-      <Picture apod={apod} />
+      <Picture apod={apod} getFavorite={getFavorite} favorites={favorites} />
       <Calendar setCurrent={setCurrent} />
-      <Favorite
-        current={convertDateToQuery(current)}
-        title={apod.title}
-        getFavorite={getFavorite}
-        favorites={favorites}
-      />
       <DisplayFavorite favorites={favorites} setCurrent={setCurrent} />
       <Comment
         current={current}

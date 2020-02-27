@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { Favorite } from "./Favorite";
 
 export function Picture(props) {
-  const { apod } = props;
+  const { apod, getFavorite, favorites } = props;
+  const [display, setDisplay] = useState(false);
+
   if (apod === null) {
     return <div>Loading</div>;
   }
@@ -14,16 +17,53 @@ export function Picture(props) {
 
   if (type === "image") {
     return (
-      <figure>
-        <img src={url} style={{ width: "200px", height: "200px" }} />
-        <figcaption>{`${date}: ${title}`}</figcaption>
+      <figure className="apod">
+        <figcaption className="title">{`${date}: ${title}`}</figcaption>
+        <div
+          className="pictureFrame"
+          onMouseEnter={() => {
+            setDisplay(true);
+          }}
+          onMouseLeave={() => {
+            setDisplay(false);
+          }}
+        >
+          <img src={url} />
+          <Favorite
+            current={date}
+            getFavorite={getFavorite}
+            favorites={favorites}
+            title={title}
+            display={display}
+          />
+        </div>
+        <p>{explanation}</p>
       </figure>
     );
   } else {
     return (
-      <figure>
-        <iframe src={apod.url}></iframe>
-        <figcaption>{`${date}: ${title}`}</figcaption>
+      <figure className="apod">
+        <figcaption className="title">{`${date}: ${title}`}</figcaption>
+        <div
+          className="pictureFrame"
+          onMouseEnter={() => {
+            setDisplay(true);
+          }}
+          onMouseLeave={() => {
+            setDisplay(false);
+          }}
+        >
+          <iframe src={apod.url}></iframe>
+          <Favorite
+            current={date}
+            getFavorite={getFavorite}
+            favorites={favorites}
+            title={title}
+            display={display}
+          />
+        </div>
+
+        <p>{explanation}</p>
       </figure>
     );
   }

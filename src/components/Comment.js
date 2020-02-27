@@ -55,34 +55,37 @@ export function Comment(props) {
     const results = [];
     for (let i = 0; i < pages; i++) {
       results.push(
-        <div
+        <span
           key={i}
           onClick={(i => {
             setPage(i);
           }).bind(null, i + 1)}
         >
           {i + 1}
-        </div>
+        </span>
       );
     }
     return results;
   };
 
   return (
-    <div>
-      <textarea
-        rows="4"
-        cols="50"
-        name="comment"
-        defaultValue="A space to write about space."
-        onChange={event => {
-          setComment(event.target.value);
-        }}
-      />
-      {loadComments(page)}
-      {displayPageNumbers(allComments)}
-
-      <input type="submit" value="Post" onClick={postComment} />
+    <div className="comment">
+      <div className="textblock">
+        {" "}
+        <textarea
+          className="textarea"
+          name="comment"
+          defaultValue="A space to write about space."
+          onChange={event => {
+            setComment(event.target.value);
+          }}
+        />
+        <button className="post" onClick={postComment}>
+          Post{" "}
+        </button>
+      </div>
+      <div className="commentblock"> {loadComments(page)}</div>
+      <div className="pages">{displayPageNumbers(allComments)}</div>
     </div>
   );
 }

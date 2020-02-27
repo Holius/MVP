@@ -10,7 +10,9 @@ export function Calendar(props) {
   //converts first day of the month as an integer into an array of days of the week
   const getFullWeek = (month, year) => {
     let firstDay = new Date(year, month, 1).getDay();
-    firstDay--;
+    firstDay = firstDay === 0 ? 6 : firstDay - 1;
+    console.log(firstDay);
+
     const conversion = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
     let results = [];
     for (let i = 0; i < 7; i++) {
@@ -51,8 +53,8 @@ export function Calendar(props) {
   };
 
   return (
-    <table>
-      <thead>
+    <table className="calendar">
+      <thead className="calendar-navigation">
         <Header month={month} year={year} changeDate={changeDate} />
       </thead>
       <thead>

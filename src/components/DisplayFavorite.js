@@ -4,7 +4,7 @@ import axios from "axios";
 export function DisplayFavorite(props) {
   const { favorites, setCurrent } = props;
   return (
-    <div>
+    <section className="favoriteblock">
       {favorites.map((x, i) => {
         return (
           <div
@@ -13,11 +13,10 @@ export function DisplayFavorite(props) {
               setCurrent(date);
             }).bind(null, x.entries_date)}
           >
-            {" "}
-            {x.title}{" "}
+            {x.title}
           </div>
         );
       })}
-    </div>
+    </section>
   );
 }

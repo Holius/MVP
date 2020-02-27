@@ -23,9 +23,26 @@ export function Header(props) {
 
   return (
     <tr>
-      <td onClick={changeDate.bind(null, month - 1, year)}>back</td>
-      <td> {`${convertMonthToString(month)} ${year}`} </td>
-      <td onClick={changeDate.bind(null, month + 1, year)}>forward</td>
+      <th
+        className="calendar-backward"
+        onClick={changeDate.bind(null, month - 1, year)}
+      >
+        back
+      </th>
+      <th></th>
+      <th></th>
+      <th className="calendar-center">
+        {" "}
+        {`${convertMonthToString(month)} ${year}`}{" "}
+      </th>
+      <th></th>
+      <th></th>
+      <th
+        className="calendar-forward"
+        onClick={changeDate.bind(null, month + 1, year)}
+      >
+        forward
+      </th>
     </tr>
   );
 }
