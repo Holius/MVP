@@ -8,14 +8,12 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 require("dotenv").config();
 
-var connection = mysql.createConnection({
+var pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_DB
 });
-
-connection.connect();
 
 app.set("trust proxy", 1);
 
@@ -32,7 +30,7 @@ app.use(
 app.post("/user/signup", async (req, res) => {
   const password = await bcrypt.hash(req.body.password, 10);
   const username = req.body.name;
-  connection.query(
+  pool.query(
     `INSERT INTO users (username, password) VALUES ('${username}', '${password}')`,
     function(error, results) {
       if (error) {
@@ -52,16 +50,16 @@ app
   .get((req, res) => {
     console.log(req.baseUrl, "stuff");
     const date = req.query.date;
-    connection.query(
-      `SELECT * FROM entries WHERE date="${date}" `,
-      async function(error, results) {
-        if (error || results.length === 0) {
-          res.status(500).send();
-        } else {
-          res.status(200).send(results);
-        }
+    pool.query(`SELECT * FROM entries WHERE date="${date}" `, async function(
+      error,
+      results
+    ) {
+      if (error || results.length === 0) {
+        res.status(500).send();
+      } else {
+        res.status(200).send(results);
       }
-    );
+    });
   })
   .post((req, res) => {
     function convertString(string) {
@@ -81,7 +79,7 @@ app
     const title = convertString(req.body.title);
     const type = req.body.type;
     console.log(explanation);
-    connection.query(
+    pool.query(
       `INSERT INTO entries (date, url, explanation, title, media_type) VALUES ("${date}", "${url}", "${explanation}", "${title}", "${type}")`,
       async function(error, results) {
         if (error) {
@@ -95,7 +93,7 @@ app
   });
 
 app.post("/user/login", (req, res) => {
-  connection.query(
+  pool.query(
     `SELECT * FROM users WHERE username='${req.body.name}'`,
     async function(error, results) {
       if (results[0] !== undefined) {
@@ -129,7 +127,7 @@ app
   .route("/comment")
   .get((req, res) => {
     const date = req.query.date;
-    connection.query(
+    pool.query(
       `SELECT * FROM comments WHERE entries_date="${date}" ORDER BY created_on DESC`,
       async function(error, results) {
         if (error) {
@@ -149,7 +147,7 @@ app
     if (req.session.id !== 1234) {
       res.status(404).send();
     } else {
-      connection.query(
+      pool.query(
         `INSERT INTO comments (comment, entries_date, users_username) VALUES ("${comment}", "${date}", "${username}")`,
         async function(error, results) {
           if (error) {
@@ -167,7 +165,7 @@ app
   .route("/favorite")
   .get((req, res) => {
     const name = req.session.username;
-    connection.query(
+    pool.query(
       `SELECT title, entries_date FROM favorites WHERE users_username="${name}"`,
       async function(error, results) {
         if (error) {
@@ -186,7 +184,7 @@ app
     if (req.session.id !== 1234) {
       res.status(404).send();
     } else {
-      connection.query(
+      pool.query(
         `INSERT INTO favorites (title, entries_date, users_username) VALUES ("${title}", "${date}", "${name}")`,
         async function(error, results) {
           if (error) {
