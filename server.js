@@ -15,6 +15,7 @@ var connection = mysql.createConnection({
   database: process.env.DB_DB
 });
 
+// console.log(process.env.DB_HOST);
 //b82d142b2fe186:45000866@us-cdbr-iron-east-04.cleardb.net/heroku_4fcef61a84dc646?reconnect=true
 
 connection.connect();
@@ -52,6 +53,7 @@ app.post("/user/signup", async (req, res) => {
 app
   .route("/apod")
   .get((req, res) => {
+    console.log(req.baseUrl, "stuff");
     const date = req.query.date;
     connection.query(
       `SELECT * FROM entries WHERE date="${date}" `,
