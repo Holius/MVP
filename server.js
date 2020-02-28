@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 require("dotenv").config();
 
-var connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
+var connection = mysql.createPool(process.env.CLEARDB_DATABASE_URL);
 
 // console.log(process.env.DB_HOST);
 //b82d142b2fe186:45000866@us-cdbr-iron-east-04.cleardb.net/heroku_4fcef61a84dc646?reconnect=true
