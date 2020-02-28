@@ -17,9 +17,6 @@ var connection = mysql.createConnection({
   // debug: false
 });
 
-// console.log(process.env.DB_HOST);
-//b82d142b2fe186:45000866@us-cdbr-iron-east-04.cleardb.net/heroku_4fcef61a84dc646?reconnect=true
-
 connection.connect();
 
 app.set("trust proxy", 1);
