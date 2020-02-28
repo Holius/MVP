@@ -8,19 +8,19 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 require("dotenv").config();
 
-var connection = mysql.createPool({
-  connectionLimit: 10,
+var connection = mysql.createConnection({
+  // connectionLimit: 10,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  database: process.env.DB_DB,
-  debug: false
+  database: process.env.DB_DB
+  // debug: false
 });
 
 // console.log(process.env.DB_HOST);
 //b82d142b2fe186:45000866@us-cdbr-iron-east-04.cleardb.net/heroku_4fcef61a84dc646?reconnect=true
 
-connection.getConnection();
+connection.connect();
 
 app.set("trust proxy", 1);
 
