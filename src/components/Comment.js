@@ -12,7 +12,6 @@ export function Comment(props) {
   const [page, setPage] = useState(1);
 
   const postComment = () => {
-    console.log(convertDateToQuery(current));
     axios
       .post("/comment", {
         comment: comment,

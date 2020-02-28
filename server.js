@@ -6,15 +6,18 @@ const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql");
+require("dotenv").config();
 
-// var connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "password",
-//   database: "apod"
-// });
+var connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DB
+});
 
-// connection.connect();
+//b82d142b2fe186:45000866@us-cdbr-iron-east-04.cleardb.net/heroku_4fcef61a84dc646?reconnect=true
+
+connection.connect();
 
 app.set("trust proxy", 1);
 
