@@ -1,4 +1,4 @@
-# BOILER PLATE
+# Daily Astronomy - MVP
 
 This website is deployed live at https://daily-astronomy.herokuapp.com/.
 
@@ -9,11 +9,6 @@ This website is deployed live at https://daily-astronomy.herokuapp.com/.
 -- npm start will launch a react hot server that will refresh on changes.
 These commands will not work without the proper .env file containing sensitive information: database authentincation and NASA API authentication.
 If you would like to be involved in developing this website further please contact me for information on making a .env to get the repo functional.
-
-## Getting a Copy of the Repo
-
-If you haven't already, fork the repository on GitHub and clone your newly created
-repo down to your computer.
 
 ## ES2015+ support
 
